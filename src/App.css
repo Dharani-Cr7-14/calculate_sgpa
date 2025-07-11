@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@theme{
+  --font-hero-font:Sriracha;
+}
+ 
+.bg-primary{
+  @apply bg-blue-400;
+}
+
+.bg-secondary{
+  @apply bg-red-300;
+}
