@@ -33,8 +33,6 @@ export default function Calculator() {
   };
 
   useEffect(() => {
-    let totalPoints = 0;
-    let totalCredits = 0;
     let newErrors = {};
     courses.forEach(course => {
       const grade = grades[course.code];
@@ -46,18 +44,9 @@ export default function Calculator() {
         newErrors[course.code] = "Invalid grade";
         return;
       }
-      const point = gradePoints[grade];
-      if (point !== undefined && course.credit > 0) {
-        totalPoints += point * course.credit;
-        totalCredits += course.credit;
-      }
     });
     setErrors(newErrors);
-    if (Object.keys(newErrors).length > 0 || totalCredits === 0) {
-      setSgpa(null);
-    } else {
-      setSgpa((totalPoints / totalCredits).toFixed(2));
-    }
+    // Do not setSgpa here
   }, [grades]);
 
   const calculateSGPA = () => {
@@ -124,8 +113,9 @@ export default function Calculator() {
 
           <div className="flex justify-center mt-6">
             <button
-              className="bg-amber-500 hover:bg-amber-600 size-15 text-2xl w-60 rounded-2xl text-white font-bold py-2 px-6 rounded opacity-50 cursor-not-allowed"
-              disabled
+              className="bg-amber-500 hover:bg-amber-600 size-15 text-2xl w-60 rounded-2xl text-white font-bold py-2 px-6 transition-all duration-200"
+              onClick={calculateSGPA}
+              disabled={Object.keys(errors).length > 0 || courses.some(c => c.credit > 0 && !grades[c.code])}
             >
               Calculate SGPA
             </button>
